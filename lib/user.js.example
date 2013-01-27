@@ -1,0 +1,6 @@
+User = {
+    github: {
+        username: 'k00l-h4x0r',
+        password: '12345'            // my luggage!
+    }
+};
