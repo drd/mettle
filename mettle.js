@@ -6,9 +6,18 @@ GHEvents.fetchFromServer = function() {
     var user = User.github.username,
         pass = User.github.password;
 
+    if (GHEvents.lastEtag) {
+        console.log('Requesting with "If-None-Match": ', GHEvents.lastEtag);
+    }
+
     Meteor.http.get(
         'https://api.github.com/users/' + user + '/events',
-        { auth: user + ':' + pass },
+        {
+            auth: user + ':' + pass,
+            headers: GHEvents.lastEtag ?
+                { "If-None-Match": GHEvents.lastEtag }
+              : { }
+        },
         function(error, result) {
             if (result.statusCode == 200) {
                 _(result.data).each(function(event) {
@@ -21,7 +30,13 @@ GHEvents.fetchFromServer = function() {
             console.log(result.headers.status,
                         result.headers['x-ratelimit-remaining'],
                         'remaining out of',
-                        result.headers['x-ratelimit-limit']);
+                        result.headers['x-ratelimit-limit'],
+                        result.headers.etag);
+
+            if (result.headers.etag) {
+                GHEvents.lastEtag = result.headers.etag;
+                console.log('Setting new etag', GHEvents.lastEtag);
+            }
         }
     );
 };

@@ -22,5 +22,6 @@ User = {
 changes
 =======
 
+- added ETags/conditional requests to be nicer to GitHub & your rate limits
 - added external auth (hello, github!)
 - added README
