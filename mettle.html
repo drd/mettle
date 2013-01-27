@@ -1,0 +1,27 @@
+<head>
+  <title>mettle</title>
+</head>
+
+<body>
+  {{>events}}
+</body>
+
+<template name="events">
+  <ul>
+  {{#each ghEvents}}
+    {{>event this}}
+  {{/each}}
+  </ul>
+</template>
+
+<template name="event">
+  <li>
+    {{#if payload.gist}}
+      <h3><a href="{{payload.gist.url}}">{{payload.gist.description}}</a></h3>
+    {{else}}
+      <h3><a href="{{repo.url}}">{{repo.name}}</a></h3>
+    {{/if}}
+    <img src={{actor.avatar_url}}>
+    <p>{{type}} at {{moment created_at}}</p>
+  </li>
+</template>
